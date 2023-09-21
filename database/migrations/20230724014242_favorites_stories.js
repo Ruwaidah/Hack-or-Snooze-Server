@@ -5,8 +5,8 @@
 exports.up = function (knex) {
   return knex.schema.createTable("favorites_stories", (tbl) => {
     tbl.increments();
-    tbl.integer("story_id").notNullable();
-    tbl.integer("user_id").notNullable();
+    tbl.integer("story_id").notNullable().references("id").inTable("stories");
+    tbl.integer("user_id").notNullable().references("id").inTable("users");
   });
 };
 

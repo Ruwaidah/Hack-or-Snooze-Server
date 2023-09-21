@@ -1,8 +1,10 @@
 // Update with your config settings.
+require("dotenv").config();
 
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
+
 module.exports = {
   development: {
     client: "postgresql",
@@ -11,6 +13,10 @@ module.exports = {
       database: "hack-or-snooze",
       user: "postgres",
       password: process.env.DBPASSWORD,
+    },
+    pool: {
+      min: 0,
+      max: 20,
     },
     migrations: {
       directory: "./database/migrations",
