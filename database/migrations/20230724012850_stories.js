@@ -5,7 +5,7 @@
 exports.up = function (knex) {
   return knex.schema.createTable("stories", (tbl) => {
     tbl.increments();
-    tbl.timestamp("created_at").defaultTo(knex.fn.now());
+    tbl.timestamp("createdAt").defaultTo(knex.fn.now());
     tbl.string("url", 255);
     tbl.string("auth", 100);
     tbl.string("title", 50);

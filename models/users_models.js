@@ -2,21 +2,18 @@ const db = require("../database/dbConfig");
 
 async function createNewUser(data) {
   const [id] = await db("users").insert(data, "id");
-  console.log(id);
-  const user = await db("users").where(id).first();
-  const stories = findStory(user.id);
+  return db("users").where(id).first();
 }
 
 async function findUser(data) {
-  console.log("data", data);
   const user = await db("users").where(data).first();
-  console.log("find", user);
-  const stories = await findStory(user.id);
-  console.log(stories);
-  const favoritesStory = await findfavorite(user.id);
-  //   return { user, stories, favoritesStory };
-  console.log("favoritesStory", favoritesStory);
-  return {user, stories, favoritesStory}
+  if (user) {
+    const stories = await findStory(user.id);
+    const favorites = await findfavorite(user.id);
+    return { user, stories, favorites };
+  }
+
+  return user;
 }
 
 async function findStory(id) {
@@ -25,7 +22,6 @@ async function findStory(id) {
 }
 
 async function findfavorite(userId) {
-  console.log("userId", userId);
   const favoriteStories = db("favorites_stories")
     .select("*")
     .join("stories", "favorites_stories.story_id", "stories.id")
