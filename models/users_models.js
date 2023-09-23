@@ -6,16 +6,17 @@ async function createNewUser(data) {
 }
 
 async function findUser(data) {
-  const user = await db("users")
-    .where(data)
-    .first();
+  const user = await db("users").where(data).first();
   if (user) {
     const stories = await findStory(user.id);
     const favorites = await findfavorite(user.id);
     return { user, stories, favorites };
   }
-
   return user;
+}
+
+async function updateUser(data) {
+  return db("users").where({ username: data.username }).update(data);
 }
 
 async function findStory(id) {
@@ -32,4 +33,4 @@ async function findfavorite(userId) {
   return favoriteStories;
 }
 
-module.exports = { createNewUser, findUser };
+module.exports = { createNewUser, findUser, updateUser };

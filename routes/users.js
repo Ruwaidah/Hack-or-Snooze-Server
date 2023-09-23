@@ -8,18 +8,27 @@ const restricted = require("../api/restricted-middleware.js");
 router.post("/signup", validateUser, (req, res) => {
   const user = ({ name, username, password } = req.body.user);
   user.password = bcrypt.hashSync(user.password, 8);
+
   Users.createNewUser(user)
     .then((response) => {
       const token = getToken(response);
       res.status(201).json({
-        id: response.id,
-        createdAt: response.created_at,
-        name: response.name,
-        username: response.username,
+        user: {
+          id: response.id,
+          createdAt: response.created_at,
+          name: response.name,
+          username: response.username,
+          stories: [],
+          favorites: [],
+        },
         token: token,
       });
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      if (error.code === "23505")
+        res.status(500).json({ message: "username already exists" });
+      else res.status(500).json({ message: "Error Creating user" });
+    });
 });
 
 router.post("/login", validateUser, (req, res) => {
@@ -61,7 +70,6 @@ router.post("/login", validateUser, (req, res) => {
 // GET USER
 router.get("/users/:username", restricted, (req, res) => {
   const { username } = req.params;
-  console.log(username);
   Users.findUser({ username })
     .then((response) => {
       res.status(200).json({
@@ -78,6 +86,21 @@ router.get("/users/:username", restricted, (req, res) => {
     .catch((error) => {
       res.status(500).json({ message: "error getting the user" });
     });
+});
+
+// UPDATE USER
+router.patch("/users/:username", (req, res) => {
+  const user = ({ username, name, password } = req.body.user);
+  if (req.body.user.password) {
+    req.body.user.password = bcrypt.hashSync(req.body.user.password, 8);
+  }
+  Users.updateUser(req.body.user)
+    .then((response) => {
+      if (response) res.status(200).json({ message: "Successfully update" });
+    })
+    .catch((error) =>
+      res.status(500).json({ message: "error update the user" })
+    );
 });
 
 module.exports = router;
