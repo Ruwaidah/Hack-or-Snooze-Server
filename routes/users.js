@@ -2,7 +2,8 @@ const router = require("express").Router();
 const Users = require("../models/users_models.js");
 const bcrypt = require("bcryptjs");
 const getToken = require("../generateToken.js");
-const validateUser = require("../api/restricted-middleware.js");
+const validateUser = require("../api/validateUser-middleware.js");
+const restricted = require("../api/restricted-middleware.js");
 
 router.post("/signup", validateUser, (req, res) => {
   const user = ({ name, username, password } = req.body.user);
@@ -54,6 +55,28 @@ router.post("/login", validateUser, (req, res) => {
       res.status(500).json({
         message: "error getting the user",
       });
+    });
+});
+
+// GET USER
+router.get("/users/:username", restricted, (req, res) => {
+  const { username } = req.params;
+  console.log(username);
+  Users.findUser({ username })
+    .then((response) => {
+      res.status(200).json({
+        user: {
+          id: response.user.id,
+          createdAt: response.user.created_at,
+          name: response.user.name,
+          username: response.user.username,
+          stories: response.stories,
+          favorites: response.favorites,
+        },
+      });
+    })
+    .catch((error) => {
+      res.status(500).json({ message: "error getting the user" });
     });
 });
 

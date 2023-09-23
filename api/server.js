@@ -1,7 +1,7 @@
 const express = require("express");
 
 const setUpMiddleware = require("./setUpMiddleware.js");
-const restrictedMiddleware = require("./restricted-middleware.js");
+const validateMiddleware = require("./validateUser-middleware.js");
 const server = express();
 
 // middleware

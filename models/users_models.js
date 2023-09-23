@@ -6,7 +6,9 @@ async function createNewUser(data) {
 }
 
 async function findUser(data) {
-  const user = await db("users").where(data).first();
+  const user = await db("users")
+    .where(data)
+    .first();
   if (user) {
     const stories = await findStory(user.id);
     const favorites = await findfavorite(user.id);
