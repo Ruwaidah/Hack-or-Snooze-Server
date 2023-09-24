@@ -11,6 +11,7 @@ router.post("/signup", validateUser, (req, res) => {
 
   Users.createNewUser(user)
     .then((response) => {
+      console.log(response)
       const token = getToken(response);
       res.status(201).json({
         user: {
@@ -37,7 +38,7 @@ router.post("/login", validateUser, (req, res) => {
     .then((response) => {
       if (response) {
         if (bcrypt.compareSync(user.password, response.user.password)) {
-          const token = getToken(response);
+          const token = getToken(response.user);
           res.status(200).json({
             user: {
               id: response.user.id,

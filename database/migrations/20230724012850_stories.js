@@ -7,7 +7,7 @@ exports.up = function (knex) {
     tbl.increments();
     tbl.timestamp("createdAt").defaultTo(knex.fn.now());
     tbl.string("url", 255);
-    tbl.string("auth", 100);
+    tbl.string("author", 100);
     tbl.string("title", 50);
     tbl.integer("user_id").notNullable().references("id").inTable("users");
   });
