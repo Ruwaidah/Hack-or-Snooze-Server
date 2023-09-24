@@ -20,16 +20,17 @@ async function updateUser(data) {
 }
 
 async function findStory(id) {
-  const userStories = await db("stories").where({ "stories.user_id": id })
-  .join("users", "stories.user_id", "users.id")
-  .select(
-    "stories.id as storyId",
-    "stories.author",
-    "stories.url",
-    "stories.title",
-    "stories.createdAt",
-    "username"
-  );
+  const userStories = await db("stories")
+    .where({ "stories.user_id": id })
+    .join("users", "stories.user_id", "users.id")
+    .select(
+      "stories.id as storyId",
+      "stories.author",
+      "stories.url",
+      "stories.title",
+      "stories.createdAt",
+      "username"
+    );
   return userStories;
 }
 

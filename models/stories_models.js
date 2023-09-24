@@ -29,4 +29,8 @@ async function addStory(data) {
     .first();
 }
 
-module.exports = { getAllStories, addStory };
+function updateStory(id, data) {
+  return db("stories").where(id).update(data);
+}
+
+module.exports = { getAllStories, addStory, updateStory };
