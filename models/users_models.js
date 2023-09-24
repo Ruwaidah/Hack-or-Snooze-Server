@@ -2,7 +2,6 @@ const db = require("../database/dbConfig");
 
 async function createNewUser(data) {
   const [id] = await db("users").insert(data, "id");
-  console.log(id)
   return db("users").where(id).first();
 }
 
@@ -21,7 +20,16 @@ async function updateUser(data) {
 }
 
 async function findStory(id) {
-  const userStories = await db("stories").where({ user_id: id });
+  const userStories = await db("stories").where({ "stories.user_id": id })
+  .join("users", "stories.user_id", "users.id")
+  .select(
+    "stories.id as storyId",
+    "stories.author",
+    "stories.url",
+    "stories.title",
+    "stories.createdAt",
+    "username"
+  );
   return userStories;
 }
 

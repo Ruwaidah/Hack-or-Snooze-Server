@@ -11,7 +11,6 @@ router.post("/signup", validateUser, (req, res) => {
 
   Users.createNewUser(user)
     .then((response) => {
-      console.log(response)
       const token = getToken(response);
       res.status(201).json({
         user: {
@@ -97,6 +96,7 @@ router.patch("/users/:username", (req, res) => {
   }
   Users.updateUser(req.body.user)
     .then((response) => {
+      console.log("getuser ",response)
       if (response) res.status(200).json({ message: "Successfully update" });
     })
     .catch((error) =>
