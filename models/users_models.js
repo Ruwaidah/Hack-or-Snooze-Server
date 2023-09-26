@@ -39,13 +39,25 @@ async function findfavorite(userId) {
     .select("*", "story_id as storyId")
     .join("stories", "favorites_stories.story_id ", "stories.id")
     .join("users", "favorites_stories.user_id", "users.id")
-    .where({ "users.id": userId })
+    .where({ "users.id": userId });
   return favoriteStories;
 }
- 
+
 async function addTofavorites(data) {
   const fav = await db("favorites_stories").insert(data, "id");
-  return findUser({id: data.user_id})
+  return findUser({ id: data.user_id });
 }
 
-module.exports = { createNewUser, findUser, updateUser, addTofavorites,findfavorite };
+async function deleteFromfavorites(data) {
+  const fav = await db("favorites_stories").where(data).del();
+  return findUser({ id: data.user_id });
+}
+
+module.exports = {
+  createNewUser,
+  findUser,
+  updateUser,
+  addTofavorites,
+  findfavorite,
+  deleteFromfavorites,
+};

@@ -72,7 +72,7 @@ router.get("/users/:username", restricted, (req, res) => {
   const { username } = req.params;
   Users.findUser({ username })
     .then((response) => {
-      console.log(response)
+      console.log(response);
       res.status(200).json({
         user: {
           id: response.user.id,
@@ -108,12 +108,25 @@ router.patch("/users/:username", (req, res) => {
 router.post("/users/:username/favorites/:storyId", restricted, (req, res) => {
   Users.addTofavorites({ user_id: req.token.id, story_id: req.params.storyId })
     .then((response) => {
-      res.status(200).json({user: response});
+      res.status(200).json({ user: response });
     })
     .catch((error) =>
-      console.log(error))
-    
-  // Users.findfavorite(req.token.id).then(res => console.log(res))
+      res.status(500).json({ message: "Error adding to favorites" })
+    );
+});
+
+router.delete("/users/:username/favorites/:storyId", restricted, (req, res) => {
+  console.log(req.params)
+  Users.deleteFromfavorites({
+    user_id: req.token.id,
+    story_id: req.params.storyId,
+  })
+    .then((response) => {
+      res.status(200).json({ user: response });
+    })
+    .catch((error) =>
+      res.status(500).json({ message: "Error remove from favorites" })
+    );
 });
 
 module.exports = router;
