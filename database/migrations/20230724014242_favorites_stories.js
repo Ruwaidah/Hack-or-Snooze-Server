@@ -5,8 +5,18 @@
 exports.up = function (knex) {
   return knex.schema.createTable("favorites_stories", (tbl) => {
     tbl.increments();
-    tbl.integer("story_id").notNullable().references("id").inTable("stories");
-    tbl.integer("user_id").notNullable().references("id").inTable("users");
+    tbl
+      .integer("story_id")
+      .notNullable()
+      .references("id")
+      .inTable("stories")
+      .onDelete("CASCADE")
+    tbl
+      .integer("user_id")
+      .notNullable()
+      .references("id")
+      .inTable("users")
+
   });
 };
 

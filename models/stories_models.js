@@ -33,4 +33,8 @@ function updateStory(id, data) {
   return db("stories").where(id).update(data);
 }
 
-module.exports = { getAllStories, addStory, updateStory };
+function deleteStory(id) {
+return db("stories").where(id).del()
+}
+
+module.exports = { getAllStories, addStory, updateStory, deleteStory };

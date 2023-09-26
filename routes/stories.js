@@ -35,6 +35,8 @@ router.post("/", restricted, (req, res) => {
   } else res.status(500).json({ message: "Invalid URL" });
 });
 
+
+// UPDATE STORY
 router.patch("/:storyId", restricted, (req, res) => {
   const id = req.params.storyId;
   Stories.updateStory({ id }, req.body.story)
@@ -46,4 +48,14 @@ router.patch("/:storyId", restricted, (req, res) => {
     });
 });
 
+
+// DELETE STORY
+router.delete("/:id",restricted, (req, res) => {
+  console.log(req.params)
+  Stories.deleteStory(req.params).then(response => {
+console.log(response)
+res.status(200).json(response)
+  }).catch(error => res.status(500).json({message: "Error deleting story"}))
+
+})
 module.exports = router;

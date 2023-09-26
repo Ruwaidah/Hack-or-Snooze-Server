@@ -72,6 +72,7 @@ router.get("/users/:username", restricted, (req, res) => {
   const { username } = req.params;
   Users.findUser({ username })
     .then((response) => {
+      console.log(response)
       res.status(200).json({
         user: {
           id: response.user.id,
@@ -96,12 +97,23 @@ router.patch("/users/:username", (req, res) => {
   }
   Users.updateUser(req.body.user)
     .then((response) => {
-      console.log("getuser ",response)
+      console.log("getuser ", response);
       if (response) res.status(200).json({ message: "Successfully update" });
     })
     .catch((error) =>
       res.status(500).json({ message: "error update the user" })
     );
+});
+
+router.post("/users/:username/favorites/:storyId", restricted, (req, res) => {
+  Users.addTofavorites({ user_id: req.token.id, story_id: req.params.storyId })
+    .then((response) => {
+      res.status(200).json({user: response});
+    })
+    .catch((error) =>
+      console.log(error))
+    
+  // Users.findfavorite(req.token.id).then(res => console.log(res))
 });
 
 module.exports = router;
